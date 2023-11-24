@@ -19,7 +19,7 @@ pipeline {
   stages {
     stage('Init') {
       steps {
-        sh 'curl -L https://raw.githubusercontent.com/cloudsheger/jenkins-devops-libs/master/tests/packer/docker.pkr.json -o docker.pkr.json'
+       // sh 'curl -L https://raw.githubusercontent.com/cloudsheger/jenkins-devops-libs/master/tests/packer/docker.pkr.json -o docker.pkr.json'
         sh 'curl -L https://raw.githubusercontent.com/cloudsheger/jenkins-devops-libs/master/tests/packer/docker.pkr.hcl -o docker.pkr.hcl'
 
         script {
@@ -41,7 +41,7 @@ pipeline {
     stage('Validate') {
       steps {
         script {
-          packer.validate(template: 'docker.pkr.json')
+         // packer.validate(template: 'docker.pkr.json')
           packer.validate(template: 'docker.pkr.hcl')
         }
       }
@@ -60,7 +60,7 @@ pipeline {
     stage('Inspect') {
       steps {
         script {
-          packer.inspect('docker.pkr.json')
+          //packer.inspect('docker.pkr.json')
           packer.inspect('docker.pkr.hcl')
         }
       }
@@ -68,7 +68,7 @@ pipeline {
     stage('Build') {
       steps {
         script {
-          packer.build(template: 'docker.pkr.json')
+         // packer.build(template: 'docker.pkr.json')
           packer.build(template: 'docker.pkr.hcl')
         }
       }

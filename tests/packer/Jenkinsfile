@@ -20,7 +20,7 @@ pipeline {
     stage('Init') {
       steps {
        // sh 'curl -L https://raw.githubusercontent.com/cloudsheger/jenkins-devops-libs/master/tests/packer/docker.pkr.json -o docker.pkr.json'
-        sh 'curl -L https://raw.githubusercontent.com/cloudsheger/jenkins-devops-libs/master/tests/packer/docker-ubuntu.pkr.hcl -o docker-ubuntu.pkr.hcl'
+        sh 'curl -L https://raw.githubusercontent.com/cloudsheger/packer-test/main/docker-ubuntu.pkr.hcl'
         script {
           packer.init(dir: '.')
         }

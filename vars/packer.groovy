@@ -129,7 +129,7 @@ void init(Map config) {
   print 'Packer init was successful.'
 }
 
-void inspect(String template, String bin = '/usr/bin/packer') {
+void inspect(String template, String bin = '/usr/local/bin/packer') {
   // input checking
   assert fileExists(template) : "A file does not exist at ${template}."
 

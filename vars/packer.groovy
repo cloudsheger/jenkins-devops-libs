@@ -60,6 +60,28 @@ void build(Map config) {
 }
 
 void fmt(Map config) {
+  assert config.template instanceof String : 'The required template parameter was not set.'
+  assert fileExists(config.template) : "The template file or templates directory ${config.template} does not exist!"
+
+  config.bin = config.bin ?: 'packer'
+  String cmd = "${config.bin} fmt ."
+
+  try {
+    def fmtStatus = sh(script: cmd, returnStatus: true)
+
+    // report if formatting check detected issues
+    if (config.check && fmtStatus != 0) {
+      echo 'Packer fmt has detected formatting errors.'
+    }
+  } catch (Exception error) {
+    echo 'Failure using packer fmt.'
+    error.printStackTrace()
+    throw error
+  }
+
+  echo 'Packer fmt was successful.'
+}
+/*void fmt(Map config) {
   // input checking
   assert config.template instanceof String : 'The required template parameter was not set.'
   assert fileExists(config.template) : "The template file or templates directory ${config.template} does not exist!"
@@ -102,7 +124,7 @@ void fmt(Map config) {
     throw error
   }
   print 'Packer fmt was successful.'
-}
+}*/
 
 void init(Map config) {
   // input checking

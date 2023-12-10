@@ -36,64 +36,6 @@ void build(Map config) {
   echo 'Packer build artifact created successfully.'
 }
 
-/*void build(Map config) {
-  // input checking
-  assert config.template instanceof String : 'The required template parameter was not set.'
-  assert fileExists(config.template) : "The template file or templates directory ${config.template} does not exist!"
-  config.bin = config.bin ?: 'packer'
-
-  String cmd = "${config.bin} build -color=false"
-
-  // check for optional inputs
-  if (config.varFile) {
-    assert fileExists(config.varFile) : "The var file ${config.varFile} does not exist!"
-
-    cmd += " -var-file=${config.varFile}"
-  }
-  if (config.var) {
-    assert (config.var instanceof Map) : 'The var parameter must be a Map.'
-
-    config.var.each() { var, value ->
-      // convert value to json if not string type
-      if (value instanceof List || value instanceof Map) {
-        value = writeJSON(json: value, returnText: true)
-      }
-
-      cmd += " -var ${var}=${value}"
-    }
-  }
-  if (config.only) {
-    assert (config.only instanceof List) : 'The only parameter must be a list of strings.'
-
-    cmd += " -only=${config.only.join(',')}"
-  }
-  if (config.force == true) {
-    cmd += " -force"
-  }
-  if (config.onError) {
-    assert (['default', 'abort', 'ask', 'run-cleanup-provisioner'].contains(config.onError)) : "The argument must be one of: default, abort, ask, or run-cleanup-provisioner."
-
-    cmd += " -on-error=${config.onError}"
-  }
-
-  // create artifact with packer
-  try {
-    if (config.template ==~ /\.pkr\./) {
-      sh(label: 'Packer Build', script: "${cmd} ${config.template}")
-    }
-    else {
-      dir(config.template) {
-        sh(label: 'Packer Build', script: "${cmd} .")
-      }
-    }
-  }
-  catch(Exception error) {
-    print 'Failure using packer build.'
-    throw error
-  }
-  print 'Packer build artifact created successfully.'
-}*/
-
 void fmt(Map config) {
   assert config.template instanceof String : 'The required template parameter was not set.'
   assert fileExists(config.template) : "The template file or templates directory ${config.template} does not exist!"

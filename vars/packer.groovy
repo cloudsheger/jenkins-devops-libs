@@ -2,6 +2,41 @@
 import devops.common.utils
 
 void build(Map config) {
+  // Input validation
+  assert config.template instanceof String : 'The required template parameter was not set.'
+  assert fileExists(config.template) : "The template file or templates directory ${config.template} does not exist!"
+
+  // Set default values
+  config.bin = config.bin ?: 'packer'
+
+  // Build the basic Packer command
+  String cmd = "${config.bin} build -color=false"
+
+  // Add optional parameters to the command
+  if (config.varFile) cmd += " -var-file=${config.varFile}"
+  if (config.var) config.var.each { var, value -> cmd += " -var ${var}=${value instanceof List || value instanceof Map ? writeJSON(json: value, returnText: true) : value}" }
+  if (config.only) cmd += " -only=${config.only.join(',')}"
+  if (config.force) cmd += " -force"
+  if (config.onError) {
+    // Validate and add the onError option
+    assert ['default', 'abort', 'ask', 'run-cleanup-provisioner'].contains(config.onError) : "The argument must be one of: default, abort, ask, or run-cleanup-provisioner."
+    cmd += " -on-error=${config.onError}"
+  }
+
+  try {
+    // Execute Packer build command
+    sh(label: 'Packer Build', script: config.template ==~ /\.pkr\./ ? "${cmd} ${config.template}" : "${cmd} .")
+  } catch (Exception error) {
+    // Handle build failure
+    echo 'Failure using packer build.'
+    throw error
+  }
+
+  // Print success message
+  echo 'Packer build artifact created successfully.'
+}
+
+/*void build(Map config) {
   // input checking
   assert config.template instanceof String : 'The required template parameter was not set.'
   assert fileExists(config.template) : "The template file or templates directory ${config.template} does not exist!"
@@ -57,7 +92,7 @@ void build(Map config) {
     throw error
   }
   print 'Packer build artifact created successfully.'
-}
+}*/
 
 void fmt(Map config) {
   assert config.template instanceof String : 'The required template parameter was not set.'

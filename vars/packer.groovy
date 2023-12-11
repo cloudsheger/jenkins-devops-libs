@@ -1,4 +1,5 @@
 // vars/packer.groovy
+import devops.common.utils
 
 void build(Map config) {
   // Input validation

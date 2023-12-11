@@ -1,5 +1,4 @@
 // vars/packer.groovy
-import devops.common.utils
 
 void build(Map config) {
   // Input validation
@@ -58,51 +57,8 @@ void fmt(Map config) {
 
   echo 'Packer fmt was successful.'
 }
-/*void fmt(Map config) {
-  // input checking
-  assert config.template instanceof String : 'The required template parameter was not set.'
-  assert fileExists(config.template) : "The template file or templates directory ${config.template} does not exist!"
-  if (config.write && config.check) {
-    throw new Exception("The 'write' and 'check' options for packer.fmt are mutually exclusive - only one can be enabled.")
-  }
-  config.bin = config.bin ?: 'packer'
 
-  String cmd = "${config.bin} fmt"
-
-  // check for optional inputs
-  if (config.diff == true) {
-    cmd += ' -diff'
-  }
-  if (config.check == true) {
-    cmd += ' -check'
-  }
-  // incompatible with above
-  else if (config.write == true) {
-    cmd += ' -write'
-  }
-
-  try {
-    if (config.template ==~ /\.pkr\./) {
-      final int fmtStatus = sh(label: 'Packer Format', returnStatus: true, script: "${cmd} ${config.template}")
-    }
-    else {
-      dir(config.template) {
-        final int fmtStatus = sh(label: 'Packer Format', returnStatus: true, script: "${cmd} .")
-      }
-    }
-
-    // report if formatting check detected issues
-    if ((config.check == true) && (fmtStatus != 0)) {
-      print 'Packer fmt has detected formatting errors.'
-    }
-  }
-  catch(Exception error) {
-    print 'Failure using packer fmt.'
-    throw error
-  }
-  print 'Packer fmt was successful.'
-}*/
-
+// packer init 
 void init(Map config) {
   // input checking
   assert fileExists(config.dir) : "Working template directory ${config.dir} does not exist."
